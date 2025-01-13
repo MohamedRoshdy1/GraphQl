@@ -1,0 +1,35 @@
+#containers
+services:
+    webapp:
+        build: .
+        ports:
+            - "5001:8080"
+        networks:
+            - net1
+        depends_on:
+            - sqlserver
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=graphdb;User Id=sa;Password=A@a123456;TrustServerCertificate=True
+            - ASPNETCORE_ENVIRONMENT=Development
+
+    
+    sqlserver:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+            - "1432:1433"
+        networks:
+            - net1
+        hostname: sqlserver
+        volumes:
+            - sql_data:/var/opt/mssql
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=A@a123456
+
+#networks
+networks:
+    net1:
+
+#volum
+volumes:
+    sql_data:
